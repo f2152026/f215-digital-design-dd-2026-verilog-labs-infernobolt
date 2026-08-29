@@ -7,20 +7,16 @@
 //           instantiations below into any different sequence, then
 //           re-simulate with the same tb.v and compare.
 
-module FA_Gate(
-  input  a,
-  input  b,
-  input  cin,
-  output sum,
-  output cout
-);
-  wire ps, pc1, pc2;
-
-  xor (ps,  a,   b);
-  
-  xor (sum, cin, ps);
-  and (pc1, a,   b);
-  and (pc2, cin, ps);
-  or  (cout, pc1, pc2);
-
+module FA_Gate (output sum, output cout, input a, input b, input cin);
+    wire w1, w2, w3;
+    
+    // Delays added to simulate physical gate propagation
+    xor #(2) x1(w1, a, b);
+    xor #(2) x2(sum, w1, cin);
+    
+    and #(2) a1(w2, a, b);
+    and #(2) a2(w3, w1, cin);
+    
+    
+    or  #(2) o1(cout, w2, w3);
 endmodule
